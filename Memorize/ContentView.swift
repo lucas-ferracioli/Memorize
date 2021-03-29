@@ -9,8 +9,34 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        HStack {
+            ForEach(0..<4) { _ in
+                CardView(isFaceUp: false)
+            }
+        }
+        .padding()
+        .foregroundColor(.orange)
+        .font(.largeTitle)
+    }
+}
+
+struct CardView: View {
+    var isFaceUp: Bool
+    let roundedRectangle = RoundedRectangle(cornerRadius: 10.0)
+    
+    var body: some View {
+        ZStack {
+            if isFaceUp {
+                roundedRectangle
+                    .fill(Color.white)
+                roundedRectangle
+                    .stroke(lineWidth: 3.0)
+                Text("👻")
+            } else {
+                roundedRectangle
+                    .fill()
+            }
+        }
     }
 }
 
