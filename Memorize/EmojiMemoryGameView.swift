@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  EmojiMemoryGameView.swift
 //  Memorize
 //
 //  Created by Lucas Ferracioli on 29/03/21.
@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct ContentView: View {
-    var viewModel: EmojiMemoryGame
+struct EmojiMemoryGameView: View {
+    @ObservedObject var viewModel: EmojiMemoryGame
     
     var body: some View {
         HStack {
@@ -20,7 +20,6 @@ struct ContentView: View {
         }
         .padding()
         .foregroundColor(.orange)
-        .font(.largeTitle)
     }
 }
 
@@ -29,12 +28,18 @@ struct CardView: View {
     let roundedRectangle = RoundedRectangle(cornerRadius: 10.0)
     
     var body: some View {
+        GeometryReader { geometry in
+            body(for: geometry.size)
+        }
+    }
+    
+    func body(for size: CGSize) -> some View {
         ZStack {
             if card.isFaceUp {
                 roundedRectangle
                     .fill(Color.white)
                 roundedRectangle
-                    .stroke(lineWidth: 3.0)
+                    .stroke(lineWidth: edgeLineWidth)
                 Text(card.content)
             } else {
                 roundedRectangle
@@ -42,11 +47,20 @@ struct CardView: View {
             }
         }
         .aspectRatio(2/3, contentMode: .fit)
+        .font(.system(size: fontSize(for: size)))
+    }
+    
+    // MARK: - Drawing Constants
+    
+    let edgeLineWidth: CGFloat = 3.0
+    
+    func fontSize(for size: CGSize) -> CGFloat {
+        min(size.width, size.height) * 0.75
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct EmojiMemoryGameView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(viewModel: EmojiMemoryGame())
+        EmojiMemoryGameView(viewModel: EmojiMemoryGame())
     }
 }
